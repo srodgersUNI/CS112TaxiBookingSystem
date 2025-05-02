@@ -1,44 +1,91 @@
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 /**
- * Simulate passengers requesting rides from a taxi company.
- * Passengers should be generated at random intervals.
+ * Periodically generate passengers.
+ * Keep track of the number of passengers for whom
+ * a vehicle cannot be found.
  * 
  * @author David J. Barnes and Michael Kölling
  * @version 2016.02.29
  */
-public class PassengerSource
+public class PassengerSource implements Actor
 {
+    private City city;
     private TaxiCompany company;
+    private Random rand;
+    private static final double CREATION_PROBABILITY = 0.06;
+    private int missedPickups;
 
     /**
      * Constructor for objects of class PassengerSource.
+     * @param city The city. Must not be null.
      * @param company The company to be used. Must not be null.
-     * @throws NullPointerException if company is null.
+     * @throws NullPointerException if city or company is null.
      */
-    public PassengerSource(TaxiCompany company)
+    public PassengerSource(City city, TaxiCompany company)
     {
+        if(city == null) {
+            throw new NullPointerException("city");
+        }
         if(company == null) {
             throw new NullPointerException("company");
         }
+        this.city = city;
         this.company = company;
+        // Use a fixed random seed for repeatable effects.
+        // Change this to produce more random effects.
+        rand = new Random(12345);
+        missedPickups = 0;
     }
 
     /**
-     * Have the source generate a new passenger and
-     * request a pickup from the company.
-     * @return true If the request succeeds, false otherwise.
+     * Randomly generate a new passenger.
+     * Keep a count of missed pickups.
      */
-    public boolean requestPickup()
+    public void act()
     {
-        Passenger passenger = createPassenger();
-        return company.requestPickup(passenger);
+        if(rand.nextDouble() <= CREATION_PROBABILITY) {
+            Passenger passenger = createPassenger();
+            if(company.requestPickup(passenger)) {
+                city.addItem(passenger);
+            }
+            else {
+                missedPickups++;
+            }
+        }
     }
 
     /**
-     * Create a new passenger.
+     * @return The number of passengers for whom a pickup
+     *         could not be found.
+     */
+    public int getMissedPickups()
+    {
+        return missedPickups;
+    }
+
+    /**
+     * Create a new passenger with distinct pickup and
+     * destination locations.
      * @return The created passenger.
      */
-    public Passenger createPassenger()
+    private Passenger createPassenger()
     {
-        return new Passenger(new Location(0, 0), new Location(10, 20));
+        int cityWidth = city.getWidth();
+        int cityHeight = city.getHeight();
+
+        Location pickupLocation =
+                    new Location(rand.nextInt(cityWidth),
+                                 rand.nextInt(cityHeight));
+        Location destination;
+        do{
+            destination =
+                    new Location(rand.nextInt(cityWidth),
+                                 rand.nextInt(cityHeight));
+        } while(pickupLocation.equals(destination));
+        return new Passenger(pickupLocation, destination);
     }
 }
