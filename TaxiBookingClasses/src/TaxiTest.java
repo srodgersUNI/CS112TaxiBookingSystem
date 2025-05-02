@@ -12,6 +12,7 @@ import org.junit.Test;
 public class TaxiTest
 {
     private Taxi taxi;
+    private Passenger passenger;
     
     /**
      * Default constructor for test class TaxiTest
@@ -29,7 +30,13 @@ public class TaxiTest
     public void setUp()
     {
         TaxiCompany company = new TaxiCompany();
-        Location taxiLocation = new Location();
+        // Starting position for the taxi.
+        Location taxiLocation = new Location(0, 0);
+        // Locations for the passenger.
+        Location pickup = new Location(1, 2);
+        Location destination = new Location(5, 6);
+        
+        passenger = new Passenger(pickup, destination);
         taxi = new Taxi(company, taxiLocation);
     }
 
@@ -59,9 +66,6 @@ public class TaxiTest
     @Test
     public void testPickup()
     {
-        Location pickup = new Location();
-        Location destination = new Location();
-        Passenger passenger = new Passenger(pickup, destination);
         taxi.pickup(passenger);
         assertEquals(false, taxi.isFree());
     }
@@ -70,12 +74,37 @@ public class TaxiTest
      * Test that a taxi becomes free again after offloading
      * a passenger.
      */
-    @Test
     public void testOffload()
     {
-        testPickup();
+        taxi.pickup(passenger);
+        assertEquals(false, taxi.isFree());
         taxi.offloadPassenger();
         assertEquals(true, taxi.isFree());
+    }
+    
+    /**
+     * Test that a taxi picks up and delivers a passenger within
+     * a reasonable number of steps.
+     */
+    public void testDelivery()
+    {
+        Location pickupLocation = passenger.getPickupLocation();
+        Location destination = passenger.getDestination();
+        // The number of steps expected is the sum of the taxi's
+        // distance to the passenger and the distance from there
+        // to the destination.
+        int stepsExpected = taxi.getLocation().distance(pickupLocation) +
+                    pickupLocation.distance(destination);
+        
+        taxi.pickup(passenger);
+
+        int steps = 0;
+        while(!taxi.isFree() && steps < stepsExpected) {
+            taxi.act();
+            steps++;
+        }
+        assertEquals(steps, stepsExpected);
+        assertEquals(taxi.isFree(), true);
     }
 }
 

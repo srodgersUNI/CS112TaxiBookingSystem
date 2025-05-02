@@ -78,6 +78,7 @@ public abstract class Vehicle implements Actor
     public abstract void offloadPassenger();
     
     /**
+     * Get the location.
      * @return Where this vehicle is currently located.
      */
     public Location getLocation()

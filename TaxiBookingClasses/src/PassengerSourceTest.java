@@ -1,3 +1,5 @@
+import java.util.List;
+import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +23,6 @@ public class PassengerSourceTest
 
     /**
      * Sets up the test fixture.
-     *
      * Called before every test case method.
      */
     @Before
@@ -29,6 +30,10 @@ public class PassengerSourceTest
     {
         TaxiCompany company = new TaxiCompany();
         source = new PassengerSource(company);
+        Location taxiLocation = new Location(0, 0);
+        Taxi taxi = new Taxi(company, taxiLocation);
+        List<Vehicle> vehicles = company.getVehicles();
+        vehicles.add(taxi);
     }
 
     /**
@@ -48,7 +53,12 @@ public class PassengerSourceTest
     @Test
     public void testPickup()
     {
-        assertEquals(true, source.requestPickup());
+        assertTrue(source.requestPickup());
     }
-}
 
+    @Test(expected = NullPointerException.class)
+    public void testConstructorWithNullCompany() {
+        new PassengerSource(null);
+    }
+
+}

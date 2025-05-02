@@ -3,11 +3,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Model the operation of a taxi company, operating different
- * types of vehicle. This version operates a only taxis.
+ * types of vehicle. This version operates a single taxi.
  * 
  * @author David J. Barnes and Michael Kölling
  * @version 2016.02.29
@@ -16,22 +15,17 @@ public class TaxiCompany
 {
     // The vehicles operated by the company.
     private List<Vehicle> vehicles;
-    private City city;
     // The associations between vehicles and the passengers
     // they are to pick up.
     private Map<Vehicle, Passenger> assignments;
 
-    private static final int NUMBER_OF_TAXIS = 3;
-
     /**
-     * @param city The city.
+     * Constructor for objects of class TaxiCompany
      */
-    public TaxiCompany(City city)
+    public TaxiCompany()
     {
-        this.city = city;
         vehicles = new LinkedList<>();
         assignments = new HashMap<>();
-        setupVehicles();
     }
 
     /**
@@ -63,7 +57,7 @@ public class TaxiCompany
         if(passenger == null) {
             throw new MissingPassengerException(vehicle);
         }
-        city.removeItem(passenger);
+        System.out.println(vehicle + " picks up " + passenger);
         vehicle.pickup(passenger);
     }
     
@@ -75,6 +69,7 @@ public class TaxiCompany
     public void arrivedAtDestination(Vehicle vehicle,
                                      Passenger passenger)
     {
+        System.out.println(vehicle + " offloads " + passenger);
     }
     
     /**
@@ -100,30 +95,4 @@ public class TaxiCompany
         }
         return null;
     }
-
-    /**
-     * Set up this company's vehicles. The optimum number of
-     * vehicles should be determined by analysis of the
-     * data gathered from the simulation.
-     *
-     * Vehicles start at random locations.
-     */
-    private void setupVehicles()
-    {
-        int cityWidth = city.getWidth();
-        int cityHeight = city.getHeight();
-        // Used a fixed random seed for predictable behavior.
-        // Use different seeds for less predictable behavior.
-        Random rand = new Random(12345);
-
-        // Create the taxis.
-        for(int i = 0; i < NUMBER_OF_TAXIS; i++){
-            Taxi taxi =
-                new Taxi(this,
-                         new Location(rand.nextInt(cityWidth),
-                                      rand.nextInt(cityHeight)));
-            vehicles.add(taxi);
-            city.addItem(taxi);
-        }
-   }
 }
