@@ -11,8 +11,8 @@ public abstract class Vehicle implements Actor
     private Location location;
     // Where the vehicle is headed.
     private Location targetLocation;
-    // Record how often the vehicle has nothing to do.
-    private int idleCount;
+
+
     
     /**
      * Constructor of class Vehicle
@@ -31,7 +31,7 @@ public abstract class Vehicle implements Actor
         this.company = company;
         this.location = location;
         targetLocation = null;
-        idleCount = 0;
+        Statistics.setIdleCount(0);
     }
     
     /**
@@ -138,7 +138,7 @@ public abstract class Vehicle implements Actor
      */
     public int getIdleCount()
     {
-        return idleCount;
+        return Statistics.getIdleCount();
     }
     
     /**
@@ -147,6 +147,6 @@ public abstract class Vehicle implements Actor
      */
     public void incrementIdleCount()
     {
-        idleCount++;
+        Statistics.increaseIdleCount();
     }
 }

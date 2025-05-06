@@ -17,7 +17,7 @@ public class PassengerSource implements Actor
     private TaxiCompany company;
     private Random rand;
     private static final double CREATION_PROBABILITY = 0.06;
-    private int missedPickups;
+
 
     /**
      * Constructor for objects of class PassengerSource.
@@ -38,7 +38,7 @@ public class PassengerSource implements Actor
         // Use a fixed random seed for repeatable effects.
         // Change this to produce more random effects.
         rand = new Random(12345);
-        missedPickups = 0;
+        Statistics.setMissedPickups(0);
     }
 
     /**
@@ -49,11 +49,12 @@ public class PassengerSource implements Actor
     {
         if(rand.nextDouble() <= CREATION_PROBABILITY) {
             Passenger passenger = createPassenger();
+
             if(company.requestPickup(passenger)) {
                 city.addItem(passenger);
             }
             else {
-                missedPickups++;
+                Statistics.increaseMissedPickups();
             }
         }
     }
@@ -64,7 +65,7 @@ public class PassengerSource implements Actor
      */
     public int getMissedPickups()
     {
-        return missedPickups;
+        return Statistics.getMissedPickups();
     }
 
     /**

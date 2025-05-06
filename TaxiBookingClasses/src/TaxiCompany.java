@@ -42,6 +42,7 @@ public class TaxiCompany
     public boolean requestPickup(Passenger passenger)
     {
         Vehicle vehicle = scheduleVehicle();
+        Statistics.increaseTotalPickups();
         if(vehicle != null) {
             assignments.put(vehicle, passenger);
             vehicle.setPickupLocation(passenger.getPickupLocation());
