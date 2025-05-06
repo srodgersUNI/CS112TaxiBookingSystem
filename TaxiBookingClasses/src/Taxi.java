@@ -73,6 +73,9 @@ public class Taxi extends Vehicle implements DrawableItem
      */
     public void setPickupLocation(Location location)
     {
+        if(!isFree()){
+            throw new IllegalArgumentException("Cannot set pickup location when Taxi is not free");
+        }
         setTargetLocation(location);
     }
     
