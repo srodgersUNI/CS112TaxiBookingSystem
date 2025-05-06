@@ -3,6 +3,7 @@ import java.util.LinkedList;
     
 /**
  * A shuttle is able to carry multiple passengers.
+ * This implementation is non-functional.
  * 
  * @author David J. Barnes and Michael Kölling
  * @version 2016.02.29
