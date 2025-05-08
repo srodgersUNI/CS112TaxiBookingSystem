@@ -56,11 +56,12 @@ public class Location
      * @param destination The required destination.
      * @return The number of movement steps.
      */
-    public int distance(Location destination)
+    public float distance(Location destination)
     {
         int xDist = Math.abs(destination.getX() - x);
         int yDist = Math.abs(destination.getY() - y);
         return Math.max(xDist, yDist);
+
     }
     
     /**

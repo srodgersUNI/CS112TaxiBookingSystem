@@ -20,7 +20,7 @@ public class Passenger implements DrawableItem
      * @param destination The destination location, must not be null.
      * @throws NullPointerException If either location is null.
      */
-    public Passenger(Location pickup, Location destination)
+    public Passenger(Location pickup, Location destination) throws IllegalArgumentException, NullPointerException
     {
         if(pickup == null) {
             throw new NullPointerException("Pickup location");
