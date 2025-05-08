@@ -11,9 +11,11 @@ public abstract class Vehicle implements Actor
     private Location location;
     // Where the vehicle is headed.
     private Location targetLocation;
+    // Defines whether a vehicle is en route to a
+    // pickup or drop off
+    protected boolean enRouteToPickup = false;
 
 
-    
     /**
      * Constructor of class Vehicle
      * @param company The taxi company. Must not be null.
@@ -50,14 +52,15 @@ public abstract class Vehicle implements Actor
     {
         company.arrivedAtDestination(this, passenger);
     }
-    
+
     /**
      * Receive a pickup location.
      * How this is handled depends on the type of vehicle.
+     *
      * @param location The pickup location.
      */
     public abstract void setPickupLocation(Location location);
-    
+
     /**
      * Receive a passenger.
      * How this is handled depends on the type of vehicle.
@@ -149,4 +152,6 @@ public abstract class Vehicle implements Actor
     {
         Statistics.increaseIdleCount();
     }
+
+
 }

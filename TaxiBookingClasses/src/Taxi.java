@@ -35,27 +35,31 @@ public class Taxi extends Vehicle implements DrawableItem
      * Move towards the target location if we have one.
      * Otherwise record that we are idle.
      */
-    public void act()
-    {
+    public void act() {
         Location target = getTargetLocation();
-        if(target != null) {
-            // Find where to move to next.
+        if (target != null) {
             Location next = getLocation().nextLocation(target);
             setLocation(next);
-            if(next.equals(target)) {
-                if(passenger != null) {
+
+            if (enRouteToPickup) {
+                Statistics.increaseTimeToPickup();
+            } else {
+                Statistics.increaseTimeToDropOff();
+            }
+
+            if (next.equals(target)) {
+                if (passenger != null) {
                     notifyPassengerArrival(passenger);
                     offloadPassenger();
-                }
-                else {
+                } else {
                     notifyPickupArrival();
                 }
             }
-        }
-        else {
+        } else {
             incrementIdleCount();
         }
     }
+
 
     /**
      * Is the taxi free?
@@ -71,24 +75,27 @@ public class Taxi extends Vehicle implements DrawableItem
      * target location.
      * @param location The pickup location.
      */
-    public void setPickupLocation(Location location)
-    {
-        if(!isFree()){
-            throw new IllegalArgumentException("Cannot set pickup location when Taxi is not free");
+
+    public void setPickupLocation(Location location) {
+        if (getTargetLocation() != null) {
+            throw new IllegalStateException("Cannot assign new pickup. Taxi already has a target location.");
         }
         setTargetLocation(location);
+        enRouteToPickup = true;
     }
-    
     /**
      * Receive a passenger.
      * Set their destination as the target location.
      * @param passenger The passenger.
      */
-    public void pickup(Passenger passenger)
-    {
+    public void pickup(Passenger passenger) {
         this.passenger = passenger;
         setTargetLocation(passenger.getDestination());
+        enRouteToPickup = false;
     }
+
+
+
 
     /**
      * Offload the passenger.
@@ -121,4 +128,5 @@ public class Taxi extends Vehicle implements DrawableItem
     {
         return "Taxi at " + getLocation();
     }
+
 }
