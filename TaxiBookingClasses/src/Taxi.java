@@ -27,13 +27,9 @@ public class Taxi extends Vehicle implements DrawableItem {
                 "images/taxi.jpg")).getImage();
 
         passengerImage = new ImageIcon(getClass().getResource(
-                "images/taxi+person.jpg")).getImage();
 
-        if (getLocation().equals(getTargetLocation())) {
-            throw new IllegalArgumentException("Taxi can't go to a pickup. It already has a target location.");
-
-        }
-    }
+                                "images/taxi+person.jpg")).getImage();
+}
 
     /**
      * Move towards the target location if we have one.
@@ -41,6 +37,10 @@ public class Taxi extends Vehicle implements DrawableItem {
      */
     public void act() {
         Location target = getTargetLocation();
+        if (getLocation().equals(target)) {
+            throw new IllegalArgumentException("Taxi can't go to a pickup. It already has a target location.");
+
+        }
         if (target != null) {
             // Find where to move to next.
             Location next = getLocation().nextLocation(target);

@@ -45,6 +45,7 @@ public class TaxiCompany
         Statistics.increaseTotalPickups();
         if(vehicle != null) {
             assignments.put(vehicle, passenger);
+
             vehicle.setPickupLocation(passenger.getPickupLocation());
             return true;
         }
