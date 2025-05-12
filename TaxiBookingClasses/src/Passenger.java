@@ -29,7 +29,7 @@ public class Passenger implements DrawableItem
             throw new NullPointerException("Destination location");
         }
         if(pickup.equals(destination)) {
-            throw new IllegalArgumentException("Pickup and destination are the same");
+            throw new IllegalArgumentException("Pickup and destination locations must be different.");
         }
         this.pickup = pickup;
         this.destination = destination;

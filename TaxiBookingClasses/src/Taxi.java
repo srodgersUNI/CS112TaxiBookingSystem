@@ -29,6 +29,7 @@ public class Taxi extends Vehicle implements DrawableItem
 
         passengerImage = new ImageIcon(getClass().getResource(
                                 "images/taxi+person.jpg")).getImage();
+
     }
     
     /**
@@ -37,6 +38,10 @@ public class Taxi extends Vehicle implements DrawableItem
      */
     public void act() {
         Location target = getTargetLocation();
+        if (getLocation().equals(target)) {
+            throw new IllegalArgumentException("Taxi can't go to a pickup. It already has a target location.");
+
+        }
         if (target != null) {
             Location next = getLocation().nextLocation(target);
             setLocation(next);
