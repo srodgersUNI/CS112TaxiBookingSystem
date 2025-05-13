@@ -84,6 +84,7 @@ public class Taxi extends Vehicle implements DrawableItem {
             throw new IllegalArgumentException("Cannot set pickup location when Taxi is not free");
         }
         setTargetLocation(location);
+        enRouteToPickup = true;
     }
 
     /**
@@ -95,6 +96,7 @@ public class Taxi extends Vehicle implements DrawableItem {
     public void pickup(Passenger passenger) {
         this.passenger = passenger;
         setTargetLocation(passenger.getDestination());
+        enRouteToPickup = false;
     }
 
     /**
