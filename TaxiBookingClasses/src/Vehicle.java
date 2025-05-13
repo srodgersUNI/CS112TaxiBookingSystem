@@ -14,6 +14,10 @@ public abstract class Vehicle implements Actor
     // Defines whether a vehicle is en route to a
     // pickup or drop off
     protected boolean enRouteToPickup = false;
+    // Time spent traveling to pickup locations.
+    private int timeToPickup = 0;
+    // Time spent traveling to passenger destinations.
+    private int timeToDestination = 0;
 
 
     /**
@@ -152,6 +156,37 @@ public abstract class Vehicle implements Actor
     {
         Statistics.increaseIdleCount();
     }
+    public void incrementTimeToPickup() {
+        timeToPickup++;
+    }
 
+    /**
+     * Increment the time spent traveling to a destination.
+     */
+    public void incrementTimeToDestination() {
+        timeToDestination++;
+    }
 
+    /**
+     * Get the total time spent traveling to pickups.
+     */
+    public int getTimeToPickup() {
+        return timeToPickup;
+    }
+
+    /**
+     * Get the total time spent traveling to destinations.
+     */
+    public int getTimeToDestination() {
+        return timeToDestination;
+    }
+
+    public void resetTimeToPickup() {
+        timeToPickup = 0;
+    }
+
+    public void resetTimeToDestination() {
+        timeToDestination = 0;
+
+    }
 }
