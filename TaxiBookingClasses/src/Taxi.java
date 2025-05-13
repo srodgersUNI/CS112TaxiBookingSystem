@@ -41,6 +41,12 @@ public class Taxi extends Vehicle implements DrawableItem {
             throw new IllegalArgumentException("Taxi can't go to a pickup. It already has a target location.");
 
         }
+        if (enRouteToPickup) {
+            Statistics.increaseTimeToPickup();
+        } else {
+            Statistics.increaseTimeToDropOff();
+        }
+
         if (target != null) {
             // Find where to move to next.
             Location next = getLocation().nextLocation(target);
@@ -78,6 +84,7 @@ public class Taxi extends Vehicle implements DrawableItem {
             throw new IllegalArgumentException("Cannot set pickup location when Taxi is not free");
         }
         setTargetLocation(location);
+        enRouteToPickup = true;
     }
 
     /**
@@ -89,6 +96,7 @@ public class Taxi extends Vehicle implements DrawableItem {
     public void pickup(Passenger passenger) {
         this.passenger = passenger;
         setTargetLocation(passenger.getDestination());
+        enRouteToPickup = false;
     }
 
     /**
