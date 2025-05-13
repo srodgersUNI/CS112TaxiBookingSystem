@@ -75,6 +75,14 @@ public class CityGUI extends JFrame implements Actor
          */
         public CityView(int width, int height)
         {
+            if (width < 0)
+            {
+                throw new IllegalArgumentException("width cannot be negative");
+            }
+            if (height < 0)
+            {
+                throw new IllegalArgumentException("height cannot be negative");
+            }
             cityWidth = width;
             cityHeight = height;
             setBackground(Color.white);
