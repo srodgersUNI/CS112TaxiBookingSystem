@@ -15,6 +15,7 @@ public class Shuttle extends Vehicle
     // The list of passengers on the shuttle.
     private List<Passenger> passengers;
 
+    private List<Location> pickupLocations;
     /**
      * Constructor for objects of class Shuttle
      * @param company The taxi company. Must not be null.
@@ -26,6 +27,7 @@ public class Shuttle extends Vehicle
         super(company, location);
         destinations = new LinkedList<>();
         passengers = new LinkedList<>();
+        pickupLocations = new LinkedList<>();
     }
 
     /**
@@ -33,6 +35,49 @@ public class Shuttle extends Vehicle
      */
     public void act()
     {
+        Location target = getTargetLocation();
+        if (target != null) {
+            Location next = getLocation().nextLocation(target);
+            setLocation(next);
+
+
+            // Track travel time
+            if (pickupLocations.contains(target)) {
+                incrementTimeToPickup();
+            } else {
+                incrementTimeToDestination();
+            }
+
+            if (next.equals(target)) {
+                // Check if it's a pickup
+                if (pickupLocations.contains(target)) {
+                    notifyPickupArrival();
+                    resetTimeToPickup();
+                } else {
+                    // Drop off any matching passengers
+                    List<Passenger> toRemove = new LinkedList<>();
+                    for (Passenger p : passengers) {
+                        if (p.getDestination().equals(target)) {
+                            notifyPickupArrival();
+                            toRemove.add(p);
+                        }
+                    }
+                    passengers.removeAll(toRemove);
+                    resetTimeToDestination();
+                    notifyPickupArrival();
+                    System.out.println("Time to pickup: " + getTimeToPickup());
+                    System.out.println("Time to destination: " + getTimeToDestination());
+                    offloadPassenger();
+                    resetTimeToDestination();
+
+                }
+                destinations.remove(target);
+                chooseTargetLocation();
+            }
+        } else {
+            incrementIdleCount();
+        }
+
     }
 
     /**
@@ -51,6 +96,7 @@ public class Shuttle extends Vehicle
     public void setPickupLocation(Location location)
     {
         destinations.add(location);
+        pickupLocations.add(location);
         chooseTargetLocation();
     }
     
@@ -63,6 +109,7 @@ public class Shuttle extends Vehicle
     {
         passengers.add(passenger);
         destinations.add(passenger.getDestination());
+        pickupLocations.add(passenger.getDestination());
         chooseTargetLocation();
     }
 
