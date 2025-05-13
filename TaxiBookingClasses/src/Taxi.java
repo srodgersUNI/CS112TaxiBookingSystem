@@ -41,6 +41,12 @@ public class Taxi extends Vehicle implements DrawableItem {
             throw new IllegalArgumentException("Taxi can't go to a pickup. It already has a target location.");
 
         }
+        if (enRouteToPickup) {
+            Statistics.increaseTimeToPickup();
+        } else {
+            Statistics.increaseTimeToDropOff();
+        }
+
         if (target != null) {
             // Find where to move to next.
             Location next = getLocation().nextLocation(target);
