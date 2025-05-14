@@ -95,8 +95,15 @@ public class Shuttle extends Vehicle
      */
     public void setPickupLocation(Location location)
     {
-        destinations.add(location);
-        pickupLocations.add(location);
+        try {
+            destinations.add(location);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error while adding location to list");
+        }
+        try {
+            pickupLocations.add(location);
+        } catch (IllegalArgumentException e)
+             System.out.println("Error while adding location to list");
         chooseTargetLocation();
     }
     
@@ -107,9 +114,24 @@ public class Shuttle extends Vehicle
      */
     public void pickup(Passenger passenger)
     {
-        passengers.add(passenger);
-        destinations.add(passenger.getDestination());
-        pickupLocations.add(passenger.getDestination());
+        try {
+            passengers.add(passenger);
+        }
+        catch (IllegalArgumentException e)
+        {
+            System.out.println("Error while adding passenger to passenger list");
+        }
+        try {
+            destinations.add(passenger.getDestination());
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println("Error while adding passenger destination to destinations list");
+        }
+        try {
+            pickupLocations.add(passenger.getDestination());
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println("Error while adding pickup destination to list");
         chooseTargetLocation();
     }
 
