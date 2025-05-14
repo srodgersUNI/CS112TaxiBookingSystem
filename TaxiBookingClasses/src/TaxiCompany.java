@@ -41,7 +41,9 @@ public class TaxiCompany
      */
     public boolean requestPickup(Passenger passenger)
     {
+
         Vehicle vehicle = scheduleVehicle();
+        assignments.put(scheduleVehicle(),passenger);
         Statistics.increaseTotalPickups();
         if(vehicle != null) {
             assignments.put(vehicle, passenger);
@@ -74,8 +76,7 @@ public class TaxiCompany
      * @param vehicle The vehicle at the destination.
      * @param passenger The passenger being dropped off.
      */
-    public void arrivedAtDestination(Vehicle vehicle,
-                                     Passenger passenger)
+    public void arrivedAtDestination(Vehicle vehicle, Passenger passenger)
     {
     }
     

@@ -29,7 +29,11 @@ public class Taxi extends Vehicle implements DrawableItem {
         passengerImage = new ImageIcon(getClass().getResource(
 
                                 "images/taxi+person.jpg")).getImage();
-}
+        if (getLocation().equals(getTargetLocation())) {
+            throw new IllegalArgumentException("Taxi can't go to a pickup. It already has a target location.");
+
+        }
+    }
 
     /**
      * Move towards the target location if we have one.
@@ -53,10 +57,10 @@ public class Taxi extends Vehicle implements DrawableItem {
             setLocation(next);
             if (next.equals(target)) {
                 if (passenger != null) {
-                    notifyPassengerArrival(passenger);
+                    notifyPickupArrival();
                     offloadPassenger();
                 } else {
-                    notifyPickupArrival();
+                    offloadPassenger();
                 }
             }
         } else {
@@ -71,6 +75,7 @@ public class Taxi extends Vehicle implements DrawableItem {
      */
     public boolean isFree() {
         return getTargetLocation() == null && passenger == null;
+
     }
 
     /**
@@ -105,6 +110,9 @@ public class Taxi extends Vehicle implements DrawableItem {
     public void offloadPassenger() {
         passenger = null;
         clearTargetLocation();
+        System.out.println("Time to pickup: " + getTimeToPickup() + " steps.");
+        System.out.println("Time to destination: " + getTimeToDestination() + " steps.");
+
     }
 
     /**
